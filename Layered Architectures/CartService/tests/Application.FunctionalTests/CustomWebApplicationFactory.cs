@@ -1,42 +1,40 @@
-﻿using System.Data.Common;
-using CartService.Application.Common.Interfaces;
+﻿using CartService.Application.Common.Interfaces;
 using CartService.Infrastructure.Data;
+using LiteDB;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace CartService.Application.FunctionalTests;
-
-using static Testing;
-
+namespace CleanArchitecture.Application.FunctionalTests;
 public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
-    private readonly DbConnection _connection;
+    private readonly string _dbName;
 
-    public CustomWebApplicationFactory(DbConnection connection)
+    public CustomWebApplicationFactory()
     {
-        _connection = connection;
+        _dbName = Path.GetTempFileName();
     }
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureTestServices(services =>
         {
-            services
-                .RemoveAll<IUser>()
-                .AddTransient(provider => Mock.Of<IUser>(s => s.Id == GetUserId()));
-
-            services
-                .RemoveAll<DbContextOptions<ApplicationDbContext>>()
-                .AddDbContext<ApplicationDbContext>((sp, options) =>
-                {
-                    options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
-                    options.UseSqlite(_connection);
-                });
+            services.RemoveAll<IApplicationDbContext>()
+                    .AddSingleton(new LiteDatabase(new MemoryStream()))
+                    // For transient service use Func<IServiceProvider, LiteDatabase> factory
+                    .AddSingleton<IApplicationDbContext, ApplicationDbContext>();
         });
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            File.Delete(_dbName);
+        }
+
+        base.Dispose(disposing);
     }
 }

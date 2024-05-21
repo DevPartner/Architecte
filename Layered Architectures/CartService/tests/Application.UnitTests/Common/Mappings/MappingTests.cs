@@ -1,10 +1,9 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using AutoMapper;
+using CartService.Application.CartItems.Queries.GetItemsWithPagination;
 using CartService.Application.Common.Interfaces;
 using CartService.Application.Common.Models;
-using CartService.Application.TodoItems.Queries.GetTodoItemsWithPagination;
-using CartService.Application.TodoLists.Queries.GetTodos;
 using CartService.Domain.Entities;
 using NUnit.Framework;
 
@@ -30,11 +29,8 @@ public class MappingTests
     }
 
     [Test]
-    [TestCase(typeof(TodoList), typeof(TodoListDto))]
-    [TestCase(typeof(TodoItem), typeof(TodoItemDto))]
-    [TestCase(typeof(TodoList), typeof(LookupDto))]
-    [TestCase(typeof(TodoItem), typeof(LookupDto))]
-    [TestCase(typeof(TodoItem), typeof(TodoItemBriefDto))]
+    [TestCase(typeof(CartItem), typeof(CartItemDto))]
+    [TestCase(typeof(CartItem), typeof(LookupDto))]
     public void ShouldSupportMappingFromSourceToDestination(Type source, Type destination)
     {
         var instance = GetInstanceOf(source);

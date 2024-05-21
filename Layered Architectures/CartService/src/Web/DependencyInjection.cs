@@ -1,7 +1,4 @@
 ﻿using Azure.Identity;
-using CartService.Application.Common.Interfaces;
-using CartService.Infrastructure.Data;
-using CartService.Web.Services;
 using Microsoft.AspNetCore.Mvc;
 
 using NSwag;
@@ -15,12 +12,10 @@ public static class DependencyInjection
     {
         services.AddDatabaseDeveloperPageExceptionFilter();
 
-        services.AddScoped<IUser, CurrentUser>();
-
         services.AddHttpContextAccessor();
 
-        services.AddHealthChecks()
-            .AddDbContextCheck<ApplicationDbContext>();
+        services.AddHealthChecks()/*
+            .AddDbContextCheck<ApplicationDbContext>()*/;
 
         services.AddExceptionHandler<CustomExceptionHandler>();
 

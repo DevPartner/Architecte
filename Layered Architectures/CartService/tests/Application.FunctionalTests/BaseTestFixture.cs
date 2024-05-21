@@ -1,13 +1,10 @@
-﻿namespace CartService.Application.FunctionalTests;
+﻿namespace CleanArchitecture.Application.FunctionalTests;
 
 using static Testing;
 
-[TestFixture]
 public abstract class BaseTestFixture
 {
-    [SetUp]
-    public async Task TestSetUp()
+    public void TestSetUp()
     {
-        await ResetState();
     }
 }

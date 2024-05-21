@@ -1,11 +1,9 @@
 ﻿using CartService.Application.Common.Interfaces;
-using CartService.Domain.Constants;
+using CartService.Domain.Entities;
 using CartService.Infrastructure.Data;
-using CartService.Infrastructure.Data.Interceptors;
-using CartService.Infrastructure.Identity;
+using LiteDB;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 
 namespace Microsoft.Extensions.DependencyInjection;
@@ -18,15 +16,13 @@ public static class DependencyInjection
 
         Guard.Against.Null(connectionString, message: "Connection string 'DefaultConnection' not found.");
 
-        services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
-        services.AddScoped<ISaveChangesInterceptor, DispatchDomainEventsInterceptor>();
-
-        services.AddDbContext<ApplicationDbContext>((sp, options) =>
-        {
-            options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
-
-            options.UseSqlite(connectionString);
+        services.AddSingleton(x => {
+            return new LiteDatabase(connectionString);
         });
+        services.AddScoped<ApplicationDbContext>();
+
+        // Register the RepositoryService for each of your domain entities
+        services.AddScoped<IRepository<CartItem>, LiteRepository<CartItem>>();
 
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 
@@ -37,17 +33,7 @@ public static class DependencyInjection
 
         services.AddAuthorizationBuilder();
 
-        services
-            .AddIdentityCore<ApplicationUser>()
-            .AddRoles<IdentityRole>()
-            .AddEntityFrameworkStores<ApplicationDbContext>()
-            .AddApiEndpoints();
-
         services.AddSingleton(TimeProvider.System);
-        services.AddTransient<IIdentityService, IdentityService>();
-
-        services.AddAuthorization(options =>
-            options.AddPolicy(Policies.CanPurge, policy => policy.RequireRole(Roles.Administrator)));
 
         return services;
     }
