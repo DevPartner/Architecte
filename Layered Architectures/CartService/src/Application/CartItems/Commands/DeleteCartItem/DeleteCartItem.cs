@@ -4,14 +4,18 @@ using CartService.Domain.Events;
 
 namespace CartService.Application.CartItems.Commands.DeleteItem;
 
-public record DeleteCartItemCommand(int Id) : IRequest;
+public record DeleteCartItemCommand : IRequest
+{
+    public int CartId { get; init; }
+    public string? Name { get; init; }
+}
 
 public class DeleteCartItemCommandHandler : IRequestHandler<DeleteCartItemCommand>
 {
     private readonly IApplicationDbContext _context;
-    private readonly IRepository<CartItem> _repository;
+    private readonly IRepository<Cart> _repository;
 
-    public DeleteCartItemCommandHandler(IApplicationDbContext context, IRepository<CartItem> repository)
+    public DeleteCartItemCommandHandler(IApplicationDbContext context, IRepository<Cart> repository)
     {
         _context = context;
         _repository = repository;
@@ -19,15 +23,20 @@ public class DeleteCartItemCommandHandler : IRequestHandler<DeleteCartItemComman
 
     public async Task Handle(DeleteCartItemCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _repository
-            .GetByIdAsync(request.Id, cancellationToken);
+        var cart = await _repository.FirstOrDefaultAsync(x => x.Id == request.CartId, cancellationToken);
+        Guard.Against.NotFound(request.CartId, cart);
 
-        Guard.Against.NotFound(request.Id, entity);
 
-        await _repository.DeleteAsync(request.Id, cancellationToken);
+        var cartItem = cart.Items.FirstOrDefault(item => item.Name == request.Name);
 
-        entity.AddDomainEvent(new CartItemDeletedEvent(entity));
+        if (cartItem != null)
+        {
+            (cart.Items as List<CartItem>)?.Remove(cartItem);
+            cart.AddDomainEvent(new CartItemDeletedEvent(cartItem));
 
-        await _context.SaveChangesAsync(cancellationToken);
+            await _repository.UpdateAsync(cart, cancellationToken);
+
+            await _context.SaveChangesAsync(cancellationToken);
+        }
     }
 }

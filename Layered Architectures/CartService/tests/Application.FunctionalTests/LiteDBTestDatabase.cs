@@ -1,4 +1,4 @@
-﻿using System.Data.Common;
+﻿using CartService.Domain.ValueObjects;
 using CartService.Application.FunctionalTests;
 using CartService.Domain.Entities;
 using LiteDB;
@@ -17,17 +17,23 @@ public class LiteDBTestDatabase : ITestDatabase
 
     public Task InitialiseAsync()
     {
-        var cartItem = new CartItem { CartId = 1, AltText = "alt", Name = "1", Price = 1 };
+        var cart = new Cart
+        {
+            Id = 1,
+            Items = new List<CartItem>() {
+                new CartItem {  Name = "1", Price = new Money(1, "USD") }
+            }
+        };
 
-        var liteCollection = _context.GetCollection<CartItem>("CartItems");
-        liteCollection.Insert(cartItem);
+        var liteCollection = _context.GetCollection<Cart>("Cart");
+        liteCollection.Insert(cart);
 
         return Task.CompletedTask;
     }
 
     public Task ResetAsync()
     {
-        _context.DropCollection("CartItems");
+        _context.DropCollection("Cart");
         return Task.CompletedTask;
     }
 
@@ -38,6 +44,4 @@ public class LiteDBTestDatabase : ITestDatabase
     }
 
     public LiteDatabase Context => _context;
-
-    // ... other required methods ...
 }

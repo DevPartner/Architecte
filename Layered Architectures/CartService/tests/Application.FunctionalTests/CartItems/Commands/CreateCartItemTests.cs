@@ -1,7 +1,7 @@
 ﻿using CartService.Application.CartItems.Commands.CreateItem;
 using CartService.Application.Common.Exceptions;
 using CartService.Domain.Entities;
-using CleanArchitecture.Application.FunctionalTests;
+using CartService.Domain.ValueObjects;
 
 namespace CleanArchitecture.Application.FunctionalTests;
 
@@ -21,16 +21,13 @@ public class CreateCartItemTests : BaseTestFixture
     [Test]
     public async Task ShouldCreateCartItem()
     {
-        var command = new CreateCartItemCommand { CartId = 1, AltText = "alt", Name = "1", Price = 1 }; 
+        var command = new CreateCartItemCommand { CartId = 1, Name = "1", Price = new Money(1, "USD"), Quantity = 1 };
 
         var itemId = await SendAsync(command);
 
-        var item = await FindAsync<CartItem>(itemId);
+        var item = await FindAsync<Cart>(command.CartId);
 
         item.Should().NotBeNull();
-        item!.CartId.Should().Be(command.CartId);
-        item.Name.Should().Be(command.Name);
-        item.AltText.Should().Be(command.AltText);
-        item.Price.Should().Be(command.Price);
+        item.Items.Where(x=>x.Name == command.Name).Should().NotBeEmpty();
     }
 }

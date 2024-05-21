@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using AutoMapper;
-using CartService.Application.CartItems.Queries.GetItemsWithPagination;
+using CartService.Application.Carts.Queries.GetCart;
 using CartService.Application.Common.Interfaces;
 using CartService.Application.Common.Models;
 using CartService.Domain.Entities;

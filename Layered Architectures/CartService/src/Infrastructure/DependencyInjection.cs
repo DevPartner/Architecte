@@ -21,8 +21,7 @@ public static class DependencyInjection
         });
         services.AddScoped<ApplicationDbContext>();
 
-        // Register the RepositoryService for each of your domain entities
-        services.AddScoped<IRepository<CartItem>, LiteRepository<CartItem>>();
+        services.AddScoped<IRepository<Cart>, LiteRepository<Cart>>();
 
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 

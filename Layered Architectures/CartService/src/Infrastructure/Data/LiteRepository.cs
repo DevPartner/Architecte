@@ -5,7 +5,7 @@ using CartService.Domain.Common;
 using LiteDB;
 
 namespace CartService.Infrastructure.Data;
-public class LiteRepository<T> : IRepository<T> where T : class, IBaseEntity, new()
+public class LiteRepository<T> : IRepository<T> where T : class, IBaseEntity//, new()
 {
     private readonly LiteDatabase _database;
     private readonly ILiteCollection<T> _collection;
@@ -26,6 +26,12 @@ public class LiteRepository<T> : IRepository<T> where T : class, IBaseEntity, ne
     {
         IEnumerable<T> result = _collection.FindAll();
         return Task.FromResult(result);
+    }
+
+    public async Task<T?> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate,  CancellationToken cancellationToken)
+    {
+        var result = _collection.Find(predicate).FirstOrDefault();
+        return await Task.FromResult(result);
     }
 
     public async Task<T> GetByIdAsync(int id, CancellationToken cancellationToken)

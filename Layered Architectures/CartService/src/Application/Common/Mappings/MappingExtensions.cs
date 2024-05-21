@@ -1,6 +1,4 @@
 ﻿using CartService.Application.Common.Models;
-using CartService.Application.CartItems.Queries.GetItemsWithPagination;
-using CartService.Domain.Entities;
 
 namespace CartService.Application.Common.Mappings;
 
@@ -17,5 +15,4 @@ public static class MappingExtensions
         var mappedItems = mapper.Map<List<TDestination>>(paginatedList.Items);
         return new PaginatedList<TDestination>(mappedItems, paginatedList.TotalCount, paginatedList.PageNumber, pageSize);
     }
-
 }
