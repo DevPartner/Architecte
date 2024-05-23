@@ -1,6 +1,23 @@
-﻿# CartService
+﻿# Description
 
+This application includes a single entity - Cart which encapsulates the following functionalities:
+
+Generate a unique client-side cart ID
+Fetch list of items in the cart
+Add an item into the cart
+Remove an item from the cart
+
+Each item in a cart encapsulates the following information:
+Required ID, which serves to denote the item in the external system
+Required item name
+Optional image URL and alt text
+Required price
+Quantity of items in the cart
+
+
+# Architecture
 The project was generated using the [Clean.Architecture.Solution.Template](https://github.com/jasontaylordev/CartService) version 8.0.5.
+LiteDB, a simple, fast and lightweight .NET database, is used for managing the data persistence and retrieval.
 
 ## Build
 
@@ -53,6 +70,3 @@ To run the tests:
 ```bash
 dotnet test
 ```
-
-## Help
-To learn more about the template go to the [project website](https://github.com/jasontaylordev/CleanArchitecture). Here you can find additional guidance, request new features, report a bug, and discuss the template with other users.
