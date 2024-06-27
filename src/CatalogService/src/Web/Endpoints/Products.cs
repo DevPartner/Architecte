@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using CatalogService.Application.Common.Models;
-using CatalogService.Domain.Entities;
 using CatalogService.Web.Helpers;
 using CatalogService.Web.Models;
 using CleanArchitecture.Application.Products.Commands.CreateProduct;
@@ -8,43 +6,10 @@ using CleanArchitecture.Application.Products.Commands.DeleteProduct;
 using CleanArchitecture.Application.Products.Commands.UpdateProduct;
 using CleanArchitecture.Application.Products.Queries.GetProduct;
 using CleanArchitecture.Application.Products.Queries.GetProductsWithPagination;
-using Microsoft.AspNetCore.Routing;
 namespace CatalogService.Web.Endpoints;
 
 public class Products : EndpointGroupBase
 {
-    /*private readonly IMapper _mapper;
-    private readonly ILinkGenerator _linkGenerator;
-
-    public Products(IMapper mapper, ILinkGenerator linkGenerator)
-    {
-        _mapper = mapper;
-        _linkGenerator = linkGenerator;
-    }*/
-    /*
-    public static void MapEndpoints(WebApplication app)
-    {
-        app.Lifetime.ApplicationStarted.Register(() =>
-        {
-            using (var scope = app.Services.CreateScope())
-            {
-                var scopedServices = scope.ServiceProvider;
-
-                var mapper = scopedServices.GetRequiredService<IMapper>();
-                var linkGenerator = scopedServices.GetRequiredService<ILinkGenerator>();
-
-                var products = new Products(mapper, linkGenerator);
-
-                app.MapGroup(products)
-                    .MapGet(products.GetProduct, "{id}")
-                    .MapGet(products.GetProductsWithPagination)
-                    .MapPost(products.CreateProduct)
-                    .MapPut(products.UpdateProduct, "{id}")
-                    .MapDelete(products.DeleteProduct, "{id}");
-            }
-        });
-    }
-    */
     public override void Map(WebApplication app)
     {
 
