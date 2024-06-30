@@ -121,4 +121,9 @@ node_modules/
 # env
 appsettings.Development.json
 
+# db
+/src/CatalogService/src/Web/app*
+/src/CartService/src/Web/MyDatabase*
+
 # End of default `.gitignore` template.
+
