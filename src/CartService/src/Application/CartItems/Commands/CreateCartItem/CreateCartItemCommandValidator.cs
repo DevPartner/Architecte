@@ -12,6 +12,10 @@ public class CreateCartItemCommandValidator : AbstractValidator<CreateCartItemCo
             .NotEmpty()
             .WithMessage("CartKey is required.");
 
+        RuleFor(v => v.ProductKey)
+            .NotEmpty()
+            .WithMessage("ProductKey is required.");
+
         RuleFor(v => v.Price)
             .NotEmpty()
             .WithMessage("Price is required.");

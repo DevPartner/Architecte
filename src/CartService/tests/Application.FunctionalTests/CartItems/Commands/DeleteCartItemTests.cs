@@ -2,7 +2,6 @@
 using CartService.Application.CartItems.Commands.DeleteItem;
 using CartService.Domain.Entities;
 using CartService.Domain.ValueObjects;
-using CleanArchitecture.Application.FunctionalTests;
 
 namespace CleanArchitecture.Application.FunctionalTests;
 
@@ -13,7 +12,7 @@ public class DeleteCartItemTests : BaseTestFixture
     [Test]
     public async Task ShouldRequireValidCartItemId()
     {
-        var command = new DeleteCartItemCommand { CartId = 99, Name = "1" };
+        var command = new DeleteCartItemCommand { CartKey = 99.ToString(), ItemId = 1 };
 
         await FluentActions.Invoking(() =>
             SendAsync(command)).Should().ThrowAsync<NotFoundException>();
@@ -22,14 +21,21 @@ public class DeleteCartItemTests : BaseTestFixture
     [Test]
     public async Task ShouldDeleteCartItem()
     {
-        var command = new CreateCartItemCommand { CartId = 1, Name = "1", Price = new Money(1, "USD"), Quantity = 1 };
+        var command = new CreateCartItemCommand { CartKey = 1.ToString(), ProductKey = "1", Name = "1", Price = new Money(1, "USD"), Quantity = 1 };
 
         var itemId = await SendAsync(command);
+        
+        var command2 = new CreateCartItemCommand { CartKey = 1.ToString(), ProductKey = "2", Name = "2", Price = new Money(1, "USD"), Quantity = 1 };
 
-        await SendAsync(new DeleteCartItemCommand { CartId = 1, Name = "1" });
+        var itemId2 = await SendAsync(command2);
 
-        var cart = await FindAsync<Cart>(command.CartId);
+        await SendAsync(new DeleteCartItemCommand { CartKey = 1.ToString(), ItemId = itemId });
 
-        cart.Items.Where(x=>x.Name == command.Name).Should().BeEmpty();
+        var cart = await FindAsync<Cart>(x => x.CartKey == command.CartKey);
+
+        cart.Should().NotBeNull();
+
+        cart!.Items.Where(x => x.Name == command.Name).Should().BeEmpty();
+        cart!.Items.FirstOrDefault(x => x.Name == command2.Name).Should().NotBeNull();
     }
 }

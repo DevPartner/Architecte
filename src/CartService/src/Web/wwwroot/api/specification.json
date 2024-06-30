@@ -123,6 +123,10 @@
             "type": "integer",
             "format": "int32"
           },
+          "productKey": {
+            "type": "string",
+            "nullable": true
+          },
           "name": {
             "type": "string"
           },
@@ -193,6 +197,10 @@
         "properties": {
           "cartKey": {
             "type": "string"
+          },
+          "productKey": {
+            "type": "string",
+            "nullable": true
           },
           "name": {
             "type": "string",

@@ -4,6 +4,7 @@ namespace CartService.Domain.Entities;
 
 public class CartItem : BaseAuditableEntity
 {
+    public string? ProductKey { get; set; }
     public required string Name { get; set; }
     public Image? Image { get; set; }
     public required Money Price { get; set; }

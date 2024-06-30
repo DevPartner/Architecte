@@ -1,6 +1,7 @@
 ﻿using CartService.Application.Common.Interfaces;
 using CartService.Domain.Entities;
 using CartService.Infrastructure.Data;
+using CartService.Infrastructure.Messaging;
 using LiteDB;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -33,6 +34,8 @@ public static class DependencyInjection
         services.AddAuthorizationBuilder();
 
         services.AddSingleton(TimeProvider.System);
+        
+        services.AddHostedService<MessageListener>();
 
         return services;
     }

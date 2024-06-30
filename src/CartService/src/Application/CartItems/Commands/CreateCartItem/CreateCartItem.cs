@@ -8,6 +8,7 @@ namespace CartService.Application.CartItems.Commands.CreateItem;
 public record CreateCartItemCommand : IRequest<int>
 {
     public required string CartKey { get; init; }
+    public string? ProductKey { get; init; }
     public string? Name { get; init; }
     public Image? Image { get; init; }
     public Money? Price { get; init; }
@@ -41,14 +42,12 @@ public class CreateCartItemCommandHandler : IRequestHandler<CreateCartItemComman
             Name = request.Name!,
             Price = request.Price!,
             Image = request.Image,
+            ProductKey = request.ProductKey,
             Quantity = request.Quantity
         };
 
-        entity.AddDomainEvent(new CartItemCreatedEvent(entity));
-
-
         // add or update cartItem in the cart's Items collection
-        var existingCartItem = cart.Items.FirstOrDefault(item => item.Name == entity.Name && item.Price == item.Price);
+        var existingCartItem = cart.Items.FirstOrDefault(item => item.ProductKey == request.ProductKey);
 
         if (existingCartItem != null)
         {
@@ -66,6 +65,8 @@ public class CreateCartItemCommandHandler : IRequestHandler<CreateCartItemComman
 
         await _context.SaveChangesAsync(cancellationToken);
 
-        return entity.Id;
+        entity.AddDomainEvent(new CartItemCreatedEvent(entity));
+
+        return cart.Items.Count - 1;
     }
 }

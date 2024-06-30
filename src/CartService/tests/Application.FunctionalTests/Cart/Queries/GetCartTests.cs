@@ -12,11 +12,11 @@ public class GetCartTests : BaseTestFixture
     [Test]
     public async Task ShouldReturnAllListsAndItems()
     {
-        var command = new CreateCartItemCommand { CartId = 1, Name = "1", Price = new Money(1, "USD"), Quantity = 1 };
+        var command = new CreateCartItemCommand { CartKey = 1.ToString(), ProductKey = "1", Name = "1", Price = new Money(1, "USD"), Quantity = 1 };
 
         var itemId = await SendAsync(command);
 
-        var query = new GetCartQuery(1);
+        var query = new GetCartQuery(1.ToString());
 
         var result = await SendAsync(query);
 
