@@ -3,6 +3,7 @@ using CatalogService.Domain.Constants;
 using CatalogService.Infrastructure.Data;
 using CatalogService.Infrastructure.Data.Interceptors;
 using CatalogService.Infrastructure.Identity;
+using CleanArchitecture.Infrastructure.Messaging;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -48,6 +49,8 @@ public static class DependencyInjection
 
         services.AddAuthorization(options =>
             options.AddPolicy(Policies.CanPurge, policy => policy.RequireRole(Roles.Administrator)));
+
+        services.AddHostedService<OutboxMessagePublisher>();
 
         return services;
     }

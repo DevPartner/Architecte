@@ -7,7 +7,7 @@ namespace CartService.Application.CartItems.Commands.DeleteItem;
 public record DeleteCartItemCommand : IRequest
 {
     public required string CartKey { get; init; }
-    public int ItemId { get; init; }
+    public required int ItemId { get; set; }
 }
 
 public class DeleteCartItemCommandHandler : IRequestHandler<DeleteCartItemCommand>
@@ -27,7 +27,7 @@ public class DeleteCartItemCommandHandler : IRequestHandler<DeleteCartItemComman
 
         Guard.Against.NotFound(request.CartKey, cart);
 
-        var cartItem = cart.Items.FirstOrDefault(item => item.Id == request.ItemId);
+        var cartItem = cart.Items.ToArray()[request.ItemId];
 
         Guard.Against.NotFound(request.ItemId, cartItem);
 

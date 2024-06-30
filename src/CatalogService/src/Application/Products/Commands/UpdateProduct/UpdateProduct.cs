@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Text.Json;
 using System.Xml.Linq;
 using CatalogService.Application.Common.Interfaces;
 using CatalogService.Domain.Entities;
@@ -40,6 +41,17 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand>
         entity.Image = request.Image;
         entity.Price = request.Price;
         entity.Amount = request.Amount;
+
+        _context.Products.Update(entity);
+        // Create an outbox message
+        var outboxMessage = new OutboxMessage
+        {
+            ItemId = entity.Id,
+            Type = "ProductUpdated",
+            Data = JsonSerializer.Serialize(entity)
+        };
+
+        _context.OutboxMessages.Add(outboxMessage);
 
         await _context.SaveChangesAsync(cancellationToken);
         //entity.AddDomainEvent(new ProductUpdatedEvent(entity));

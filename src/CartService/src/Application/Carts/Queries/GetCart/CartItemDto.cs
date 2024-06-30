@@ -6,6 +6,7 @@ namespace CartService.Application.Carts.Queries.GetCart;
 public class CartItemDto
 {
     public int Id { get; init; }
+    public string? ProductKey { get; set; }
     public required string Name { get; set; }
     public Image? Image { get; set; }
     public required Money Price { get; set; }

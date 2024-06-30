@@ -8,5 +8,7 @@ public interface IApplicationDbContext
 
     DbSet<Category> Categories { get; }
 
+    DbSet<OutboxMessage> OutboxMessages { get; }
+
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

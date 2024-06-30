@@ -1,4 +1,5 @@
-﻿using CartService.Application.Common.Interfaces;
+﻿using System.Linq.Expressions;
+using CartService.Application.Common.Interfaces;
 using LiteDB;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,14 +41,15 @@ public partial class Testing
         await mediator.Send(request);
     }
 
-    public static Task<TEntity> FindAsync<TEntity>(BsonValue id)
+    public static Task<TEntity?> FindAsync<TEntity>(Expression<Func<TEntity, bool>> predicate)
     where TEntity : class
     {
         using var scope = _scopeFactory.CreateScope();
 
         var repository = scope.ServiceProvider.GetRequiredService<IRepository<TEntity>>();
 
-        var item = repository.GetByIdAsync(id, new CancellationToken());
+        var item = repository.FirstOrDefaultAsync(predicate, new CancellationToken());
+
         return Task.FromResult(item.Result);
     }
 
