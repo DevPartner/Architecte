@@ -11,8 +11,8 @@
 # User-specific files (Mono Auto Generated)
 mono_crash.*
 
-# User-specific files (VSCode)
-.vscode/
+# User-specific files (VS)
+.vs/
 
 # Includes .NET and ASP.NET specific items
 [Dd]ebug/
