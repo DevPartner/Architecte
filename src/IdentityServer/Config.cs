@@ -14,10 +14,26 @@ public static class Config
             new IdentityResources.Profile()
         };
 
+    public static IEnumerable<ApiResource> ApiResources => new List<ApiResource>
+    {
+        new ApiResource("catalogAPI", "Catalog API")
+        {
+            Scopes = { "API" },
+            UserClaims = { "role" }
+        },
+        new ApiResource("cartAPI", "Cart API")
+        {
+            Scopes = { "API" },
+            UserClaims = { "role" }
+        },
+    };
+
     public static IEnumerable<ApiScope> ApiScopes =>
         [
-            new ApiScope("catalogAPI", "Catalog API"),
-            new ApiScope("cartAPI", "Cart API")
+            new ApiScope("API", "API")   
+            {
+                UserClaims = { "role" }
+            }
         ];
 
     public static IEnumerable<Client> Clients
@@ -28,7 +44,7 @@ public static class Config
                 ClientId = "client",
                 AllowedGrantTypes = GrantTypes.ClientCredentials,
                 ClientSecrets = { new Secret("secret".Sha256()) },
-                AllowedScopes = { "catalogAPI", "cartAPI" }
+                AllowedScopes = { "API" }
             },
             new Client
             {
@@ -38,7 +54,7 @@ public static class Config
                 {
                     new Secret("secret".Sha256())
                 },
-                AllowedScopes = {"catalogAPI", "cartAPI"},
+                AllowedScopes = {"API"},
             },
         };
 
@@ -54,7 +70,7 @@ public static class Config
                 Claims = new List<Claim>
                 {
                     new Claim(JwtClaimTypes.Role, "Manager")
-                }
+                },
             },
             new TestUser
             {

@@ -4,7 +4,7 @@ namespace CatalogService.Web.Infrastructure;
 
 public static class IEndpointRouteBuilderExtensions
 {
-    public static IEndpointRouteBuilder MapGet(this IEndpointRouteBuilder builder, Delegate handler, [StringSyntax("Route")] string pattern = "")
+    public static RouteGroupBuilder MapGet(this RouteGroupBuilder builder, Delegate handler, [StringSyntax("Route")] string pattern = "")
     {
         Guard.Against.AnonymousMethod(handler);
 
@@ -14,17 +14,18 @@ public static class IEndpointRouteBuilderExtensions
         return builder;
     }
 
-    public static IEndpointRouteBuilder MapPost(this IEndpointRouteBuilder builder, Delegate handler, [StringSyntax("Route")] string pattern = "")
+    public static RouteGroupBuilder MapPost(this RouteGroupBuilder builder, Delegate handler, [StringSyntax("Route")] string pattern = "")
     {
         Guard.Against.AnonymousMethod(handler);
 
         builder.MapPost(pattern, handler)
+            
             .WithName(handler.Method.Name);
 
         return builder;
     }
 
-    public static IEndpointRouteBuilder MapPut(this IEndpointRouteBuilder builder, Delegate handler, [StringSyntax("Route")] string pattern)
+    public static RouteGroupBuilder MapPut(this RouteGroupBuilder builder, Delegate handler, [StringSyntax("Route")] string pattern)
     {
         Guard.Against.AnonymousMethod(handler);
 
@@ -34,7 +35,7 @@ public static class IEndpointRouteBuilderExtensions
         return builder;
     }
 
-    public static IEndpointRouteBuilder MapDelete(this IEndpointRouteBuilder builder, Delegate handler, [StringSyntax("Route")] string pattern)
+    public static RouteGroupBuilder MapDelete(this RouteGroupBuilder builder, Delegate handler, [StringSyntax("Route")] string pattern)
     {
         Guard.Against.AnonymousMethod(handler);
 

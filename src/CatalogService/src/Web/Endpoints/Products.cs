@@ -14,9 +14,11 @@ public class Products : EndpointGroupBase
     {
 
         app.MapGroup(this)
-            //.RequireAuthorization()
             .MapGet(GetProduct, "{id}")
-            .MapGet(GetProductsWithPagination)
+            .MapGet(GetProductsWithPagination);
+
+        app.MapGroup(this)
+            .RequireAuthorization("ApiScope", "ManagerRole")
             .MapPost(CreateProduct)
             .MapPut(UpdateProduct, "{id}")
             .MapDelete(DeleteProduct, "{id}");

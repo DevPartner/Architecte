@@ -7,8 +7,8 @@ public class CartItems : EndpointGroupBase
 {
     public override void Map(WebApplication app)
     {
-
         app.MapGroup(this)
+            .RequireAuthorization()
             .MapPost(CreateCartItem)
             .MapDelete(DeleteCartItem, "{cartKey}/{itemId}");
     }
@@ -17,12 +17,10 @@ public class CartItems : EndpointGroupBase
     {
         var itemId = await sender.Send(command);
         return Results.Ok(itemId);
-
     }
 
     public async Task<IResult> DeleteCartItem(ISender sender, string cartKey, int itemId)
     {
-
         var command = new DeleteCartItemCommand { CartKey = cartKey, ItemId = itemId };
         await sender.Send(command);
         return Results.Ok();

@@ -1,10 +1,11 @@
 ﻿using CatalogService.Application.Common.Interfaces;
 using CatalogService.Domain.Constants;
+using CatalogService.Infrastructure.Configs;
 using CatalogService.Infrastructure.Data;
 using CatalogService.Infrastructure.Data.Interceptors;
 using CatalogService.Infrastructure.Identity;
 using CleanArchitecture.Infrastructure.Messaging;
-using Microsoft.AspNetCore.Identity;
+using IdentityModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
@@ -33,22 +34,37 @@ public static class DependencyInjection
 
         services.AddScoped<ApplicationDbContextInitialiser>();
 
+        services.AddTransient<IIdentityService, IdentityService>();
+
+        var jwtSettings = new JwtBearerOptions();
+        configuration.Bind("JwtBearerOptions", jwtSettings);
+
+        // Add services to the container.
         services.AddAuthentication()
-            .AddBearerToken(IdentityConstants.BearerScheme);
+            .AddJwtBearer(options =>
+            {
+                options.Authority = jwtSettings!.Authority;
+                options.TokenValidationParameters.ValidateAudience = jwtSettings!.ValidAudience;
+            });
 
         services.AddAuthorizationBuilder();
 
-        services
-            .AddIdentityCore<ApplicationUser>()
-            .AddRoles<IdentityRole>()
-            .AddEntityFrameworkStores<ApplicationDbContext>()
-            .AddApiEndpoints();
-
         services.AddSingleton(TimeProvider.System);
-        services.AddTransient<IIdentityService, IdentityService>();
 
-        services.AddAuthorization(options =>
-            options.AddPolicy(Policies.CanPurge, policy => policy.RequireRole(Roles.Administrator)));
+        services.AddAuthorization(options => {
+            options.AddPolicy(Policies.CanPurge, policy => policy.RequireRole(Roles.Administrator));
+            options.AddPolicy("ManagerRole", policy =>
+            {
+                policy.RequireAuthenticatedUser();
+                policy.RequireRole("Manager");
+            });
+
+            options.AddPolicy("ApiScope", policy =>
+            {
+                policy.RequireAuthenticatedUser();
+                policy.RequireClaim("scope", "API");
+            });
+        });
 
         services.AddHostedService<OutboxMessagePublisher>();
 
