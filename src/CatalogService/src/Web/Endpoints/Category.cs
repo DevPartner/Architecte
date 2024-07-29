@@ -11,20 +11,16 @@ public class Category : EndpointGroupBase
 {
     public override void Map(WebApplication app)
     {
-        /*
-        List of categories
-        Add category
-        Update category
-        Delete category (with the related items)
-         */
-
         app.MapGroup(this)
-            //.RequireAuthorization()
             .MapGet(GetCategory, "{id}")
-            .MapGet(GetCategoriesWithPagination)
+            .MapGet(GetCategoriesWithPagination);
+        
+        app.MapGroup(this)
             .MapPost(CreateCategory)
+            .RequireAuthorization("ManagerRole")
             .MapPut(UpdateCategory, "{id}")
             .MapDelete(DeleteCategory, "{id}");
+
     }
 
 

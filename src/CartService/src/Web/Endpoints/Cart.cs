@@ -7,6 +7,7 @@ public class Cart : EndpointGroupBase
     public override void Map(WebApplication app)
     {
         app.MapGroup(this)
+            .RequireAuthorization("ApiScope")
             .MapGet(GetCart, "{cartKey}");
     }
 

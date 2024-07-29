@@ -1,57 +1,46 @@
 using CatalogService.Application.Common.Interfaces;
-using CatalogService.Application.Common.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace CatalogService.Infrastructure.Identity;
 
 public class IdentityService : IIdentityService
 {
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IUserClaimsPrincipalFactory<ApplicationUser> _userClaimsPrincipalFactory;
+    //private readonly UserManager<ApplicationUser> _userManager;
     private readonly IAuthorizationService _authorizationService;
 
     public IdentityService(
-        UserManager<ApplicationUser> userManager,
-        IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory,
+        //UserManager<ApplicationUser> userManager,
         IAuthorizationService authorizationService)
     {
-        _userManager = userManager;
-        _userClaimsPrincipalFactory = userClaimsPrincipalFactory;
+        //_userManager = userManager;
         _authorizationService = authorizationService;
     }
 
     public async Task<string?> GetUserNameAsync(string userId)
     {
-        var user = await _userManager.FindByIdAsync(userId);
+        /*var user await _userManager.FindByIdAsync(userId);
 
-        return user?.UserName;
-    }
-
-    public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password)
-    {
-        var user = new ApplicationUser
-        {
-            UserName = userName,
-            Email = userName,
-        };
-
-        var result = await _userManager.CreateAsync(user, password);
-
-        return (result.ToApplicationResult(), user.Id);
+        return user?.UserName;*/
+        string? result = null;
+        return await Task.FromResult(result);
     }
 
     public async Task<bool> IsInRoleAsync(string userId, string role)
     {
-        var user = await _userManager.FindByIdAsync(userId);
+        /*var user = await _userManager.FindByIdAsync(userId);
 
-        return user != null && await _userManager.IsInRoleAsync(user, role);
+        return user != null && await _userManager.IsInRoleAsync(user, role);*/
+        bool result = false;
+        return await Task.FromResult(result);
+
     }
 
     public async Task<bool> AuthorizeAsync(string userId, string policyName)
     {
-        var user = await _userManager.FindByIdAsync(userId);
+        bool result = false;
+        return await Task.FromResult(result);
+        /*var user = await _userManager.FindByIdAsync(userId);
 
         if (user == null)
         {
@@ -62,20 +51,6 @@ public class IdentityService : IIdentityService
 
         var result = await _authorizationService.AuthorizeAsync(principal, policyName);
 
-        return result.Succeeded;
-    }
-
-    public async Task<Result> DeleteUserAsync(string userId)
-    {
-        var user = await _userManager.FindByIdAsync(userId);
-
-        return user != null ? await DeleteUserAsync(user) : Result.Success();
-    }
-
-    public async Task<Result> DeleteUserAsync(ApplicationUser user)
-    {
-        var result = await _userManager.DeleteAsync(user);
-
-        return result.ToApplicationResult();
+        return result.Succeeded;*/
     }
 }
