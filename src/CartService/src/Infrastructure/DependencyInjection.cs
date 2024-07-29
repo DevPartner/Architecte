@@ -50,11 +50,6 @@ public static class DependencyInjection
 
         services.AddAuthorization(options => {
             options.AddPolicy(Policies.CanPurge, policy => policy.RequireRole(Roles.Administrator));
-            options.AddPolicy("ManagerRole", policy =>
-            {
-                policy.RequireAuthenticatedUser();
-                policy.RequireRole("Manager");
-            });
 
             options.AddPolicy("ApiScope", policy =>
             {
