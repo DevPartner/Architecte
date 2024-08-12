@@ -1,0 +1,186 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/api/Cart/{cartKey}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/cart/{cartKey}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKeys": [ "JwtBearer" ],
+        "AllowedScopes": [ "API" ]
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/CartItems",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/cartitems",
+      "UpstreamHttpMethod": [ "POST" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKeys": [ "JwtBearer" ],
+        "AllowedScopes": [ "API" ]
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/CartItems/{cartKey}/{itemId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/cartitems/{cartKey}/{itemId}",
+      "UpstreamHttpMethod": [ "DELETE" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKeys": [ "JwtBearer" ],
+        "AllowedScopes": [ "API" ]
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/Category/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5001
+        }
+      ],
+      "UpstreamPathTemplate": "/category/{id}",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Category/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5001
+        }
+      ],
+      "UpstreamPathTemplate": "/category/{id}",
+      "UpstreamHttpMethod": [ "PUT", "DELETE" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKeys": [ "JwtBearer" ],
+        "AllowedScopes": [ "API" ]
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/Category",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5001
+        }
+      ],
+      "UpstreamPathTemplate": "/category",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Category",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5001
+        }
+      ],
+      "UpstreamPathTemplate": "/category",
+      "UpstreamHttpMethod": [ "POST" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKeys": [ "JwtBearer" ],
+        "AllowedScopes": [ "API" ]
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/Products/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5001
+        }
+      ],
+      "UpstreamPathTemplate": "/products/{id}",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Products/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5001
+        }
+      ],
+      "UpstreamPathTemplate": "/products/{id}",
+      "UpstreamHttpMethod": [ "PUT", "DELETE" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKeys": [ "JwtBearer" ],
+        "AllowedScopes": [ "API" ]
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/Products",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5001
+        }
+      ],
+      "UpstreamPathTemplate": "/products",
+      "UpstreamHttpMethod": [ "GET"],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKeys": [ "JwtBearer" ],
+        "AllowedScopes": [ "API" ]
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/Products",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5001
+        }
+      ],
+      "UpstreamPathTemplate": "/products",
+      "UpstreamHttpMethod": [ "POST" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKeys": [ "JwtBearer" ],
+        "AllowedScopes": [ "API" ]
+      }
+    }
+  ],
+  "GlobalConfiguration": {
+    "AuthenticationOptions": {
+      "Providers": [
+        {
+          "Key": "JwtBearer",
+          "IdentityServerAuthenticationProviderKey": "IdentityServer",
+          "AuthScheme": "Bearer",
+          "AllowedScopes": [ "API" ]
+        }
+      ]
+    }
+  },
+  "IdentityServer": {
+    "Authority": "https://localhost:5002",
+    "ApiName": "api",
+    "ApiSecret": "secret", // Replace this with your actual API secret if needed
+    "RequireHttpsMetadata": true
+  }
+}
