@@ -17,7 +17,7 @@ if (disco.IsError)
 // call api
 var getClient = new HttpClient();
 
-var response = await getClient.GetAsync("https://localhost:5001/api/Category?PageNumber=1&PageSize=10");
+var response = await getClient.GetAsync("https://localhost:7251/Category?PageNumber=1&PageSize=10");
 if (!response.IsSuccessStatusCode)
 {
     Console.WriteLine(response.StatusCode);
@@ -57,9 +57,9 @@ static async Task CreateCategoryAsync(string endpoint)
             Console.WriteLine(tokenResponse.AccessToken);
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
-            var content = new StringContent("{\"name\": \"testauth\",\"image\": \"string\",\"parentCategoryId\": null}", Encoding.UTF8, "application/json");
+            var content = new StringContent("{\"name\": \"testgateway\",\"image\": \"string\",\"parentCategoryId\": null}", Encoding.UTF8, "application/json");
 
-            var response = await client.PostAsync("https://localhost:5001/api/Category", content);
+            var response = await client.PostAsync("https://localhost:7251/Category", content);
             response.EnsureSuccessStatusCode();
 
             Console.WriteLine("CreateCategoryAsync response: " + await response.Content.ReadAsStringAsync());
